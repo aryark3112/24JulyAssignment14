@@ -1,97 +1,101 @@
-﻿
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace _24JulyAssignment
+namespace _24JulyAssignment14
 {
-    class BubbleSort
+    internal class Program
     {
-        static void Main()
-        {
-            int[] arr = GenerateRandomArray(10000);
-            Console.WriteLine("Original array:");
-            PrintArray(arr);
-
-            BubbleSortAlgorithm(arr);
-            Console.WriteLine("Sorted array:");
-            PrintArray(arr);
-
-            if (IsSorted(arr))
-                Console.WriteLine("The array is sorted correctly.");
-            else
-                Console.WriteLine("The array is NOT sorted correctly.");
-
-            // Performance analysis
-            int[] sizes = { 100, 500, 5000, 10000 };
-            foreach (int size in sizes)
-            {
-                int[] randomArray = GenerateRandomArray(size);
-                long bubbleSortTime = MeasureSortingTime(BubbleSortAlgorithm, randomArray);
-
-                Console.WriteLine($"Time taken to sort {size} elements using Bubble Sort: {bubbleSortTime} ms");
-            }
-
-            Console.ReadLine();
-        }
-
-        static void BubbleSortAlgorithm(int[] arr)
+        public static void BubbleSort(int[] arr)
         {
             int n = arr.Length;
+            bool swapped;
+
             for (int i = 0; i < n - 1; i++)
             {
-                bool swapped = false;
+                swapped = false;
+
                 for (int j = 0; j < n - i - 1; j++)
                 {
                     if (arr[j] > arr[j + 1])
                     {
-                        // Swap the elements
                         int temp = arr[j];
                         arr[j] = arr[j + 1];
                         arr[j + 1] = temp;
-
                         swapped = true;
                     }
                 }
 
-                // If no two elements were swapped in the inner loop, the array is already sorted.
                 if (!swapped)
+                {
                     break;
+                }
             }
         }
 
-        static int[] GenerateRandomArray(int size)
+        public static void InsertionSort(int[] arr)
         {
-            Random random = new Random();
-            int[] arr = new int[size];
-            for (int i = 0; i < size; i++)
+            int n = arr.Length;
+            for (int i = 1; i < n; i++)
             {
-                arr[i] = random.Next(1, 10000); // Generating random integers between 1 and 10000
+                int key = arr[i];
+                int j = i - 1;
+                while (j >= 0 && arr[j] > key)
+                {
+                    arr[j + 1] = arr[j];
+                    j--;
+                }
+                arr[j + 1] = key;
             }
-            return arr;
         }
 
-        static bool IsSorted(int[] arr)
+        public static void Print(int[] arr)
         {
-            for (int i = 0; i < arr.Length - 1; i++)
+            for (int i = 0; i < arr.Length; i++)
             {
-                if (arr[i] > arr[i + 1])
-                    return false;
+                Console.Write(arr[i] + " ");
             }
-            return true;
+            Console.WriteLine("\n");
         }
 
-        static void PrintArray(int[] arr)
+        static void Main(string[] args)
         {
-            Console.WriteLine(string.Join(", ", arr));
-        }
 
-        static long MeasureSortingTime(Action<int[]> sortingAlgorithm, int[] arr)
-        {
+            int[] arr = { 234, 5679, 7466, 9879, 5466, 0986, 45356, 98734 };
+            int[] arr1 = { 357, 6246, 8765, 8365, 9233, 764, 324590, 56 };
+
+            Console.Write("Before sorting: ");
+            Print(arr);
+
+            //Bubble Sorting
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            sortingAlgorithm(arr);
+            BubbleSort(arr);
             stopwatch.Stop();
-            return stopwatch.ElapsedMilliseconds;
+            Console.WriteLine("Bubble Sorting: ");
+            Print(arr);
+
+            Console.WriteLine($"Array {arr.Length} Time Taken {stopwatch.Elapsed.TotalMilliseconds} millieseconds");
+            Console.WriteLine("************************************");
+
+            //Insertion Sort
+            Stopwatch stopwatch1 = new Stopwatch();
+
+            Console.Write("Before sorting: ");
+            Print(arr1);
+
+            stopwatch1.Start();
+            InsertionSort(arr1);
+            stopwatch1.Stop();
+            Console.WriteLine("Insertion Sorting: ");
+            Print(arr1);
+
+            Console.WriteLine($"Array {arr1.Length} Time Taken {stopwatch1.Elapsed.TotalMilliseconds} millieseconds");
+
+            Console.ReadKey();
+
+
+
         }
     }
 }
